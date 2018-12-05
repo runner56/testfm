@@ -20,22 +20,21 @@ class WxMsgSender(object):
     def __init__(self):
         super(WxMsgSender, self).__init__()
 
-    @classmethod
-    def sendWxMsg(self, msg, type):
+    def sendWxMsg(self, msg, type_):
         """
-            type: text/image
+            type_: text/image
             msg: text类型时为文本，image类型时为文件路径
         """
         url = self.url + "sendMsg"
         requests.post(url, data={
                                 "msg": msg,
-                                "type":type
+                                "type":type_
         })
 
-    def sendMsg(self, msg, type="text", level="debug"):
+    def sendMsg(self, msg, type_="text", level="debug", isSendToWx=False):
         self._logMsg(msg, level)
-        if level not in ['debug', "DEBUG"]:
-            self.sendWxMsg(msg, type)
+        if isSendToWx:
+            self.sendWxMsg(msg, type_)
 
     def _logMsg(self, msg, level):
         if hasattr(logger, level): #利用反射来实现
@@ -45,11 +44,12 @@ class WxMsgSender(object):
         url = self.url + "getYZM"
         return requests.get(url).json()
 
+
 class TestMsgManager(WxMsgSender):
     def __init__(self):
         super(TestMsgManager, self).__init__()
 
-    def sendMsg(self, msg, type="text", level="debug"):
+    def sendMsg(self, msg, type_="text", level="debug", isSendToWx=False):
         self._logMsg(msg, level)
 
     def getYZM(self):

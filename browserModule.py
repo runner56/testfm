@@ -67,8 +67,8 @@ class browserModule(object):
         im     = Image.open("flowMonitorLogin.png")
         im     = im.crop((left, top, right, bottom))
         im.save("flowMonitorYZM.png")
-        self.msgManager.sendMsg(os.path.join(self.__path, "flowMonitorYZM.png"), "image")
-        self.msgManager.sendMsg(u"flowMonitor:输入验证码,格式:@+验证码", "text")
+        self.msgManager.sendMsg(os.path.join(self.__path, "flowMonitorYZM.png"), "image", isSendToWx=True)
+        self.msgManager.sendMsg(u"flowMonitor:输入验证码,格式:@+验证码", "text", isSendToWx=True)
 
     def __getYZM(self):
         while True:
@@ -77,7 +77,7 @@ class browserModule(object):
                 print yzm
                 break
             time.sleep(8)
-        self.msgManager.sendMsg(u"flowMonitor:输入的验证码: %s" % yzm, "text")
+        self.msgManager.sendMsg(u"flowMonitor:输入的验证码: %s" % yzm, "text", isSendToWx=True)
         return yzm
 
     def __openDevList(self):
@@ -125,15 +125,20 @@ class browserModule(object):
             self.driver.execute_script(f.read())
 
     def __sendmail(self):
-        self.msgManager.sendMsg(u"发送邮件...")
+        self.msgManager.sendMsg(u"发送邮件...", isSendToWx=True)
         i = mailMoudle.mail(settings.smtpServer, settings.smtpPort, settings.username, settings.password)
         lt = time.localtime()    
         ft = time.strftime('%y/%m/%d_%H:%M:%S', lt)
         subject = "%s(%s)" % (u"IDC流量监控平台运行状态", ft)
-        msgText = u"<p><span style='color:green;font-weight:bold'>绿色</span>代表采集设备运行状态正常，<span style='color:red;font-weight:bold'>红色</span>代表异常</p><img src='cid:p1'/>"
-        imgPath = "./out.png"
-        i.send(subject, settings.to_address_list, settings.cc_address_list, msgText, imgPath)
-        self.msgManager.sendMsg(u"成功发送邮件")
+        msgText = u"<p><span style='color:green;font-weight:bold'>绿色</span>代表采集设备运行状态正常，<span style='color:red;font-weight:bold'>红色</span>代表异常</p>"
+        msgText += u"<p>截图时间：%s</p><img src='cid:p1'/>" % ft
+        msgText += u"<p style='font-weight:bold'>流量监控平台拓扑图</p><img src='cid:p2'/>"
+        imgDict = {
+            "p1":"./out.png",
+            "p2":"./topo.jpg"
+        }
+        result = i.send(subject, settings.to_address_list, settings.cc_address_list, msgText, imgDict)
+        self.msgManager.sendMsg(result, isSendToWx=True)
 
     def run(self):
         self.__login()
@@ -141,3 +146,4 @@ class browserModule(object):
         self.__openDevList()
         self.__screenshot()
         self.__sendmail()
+
