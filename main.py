@@ -25,17 +25,17 @@ def main(msgManager):
         msgManager.sendMsg(e)
         import traceback
         msgManager.sendMsg(traceback.format_exc())
+    finally:
+        driver.quit()
 
     now = datetime.datetime.now()
     tom = now + datetime.timedelta(days=1)
-    tom1 = datetime.datetime(year=tom.year, month=tom.month, day=tom.day, hour=8, minute=30)
+    tom1 = datetime.datetime(year=tom.year, month=tom.month, day=tom.day, hour=8, minute=0)
     timeDelta = (tom1 - now).total_seconds()
-    timeDelta = 60
 
     Timer(timeDelta, main, (msgManager,)).start()
 
 if __name__ == '__main__':
-    import pdb;pdb.set_trace()
     if len(sys.argv)>1 and sys.argv[1]=="test":
         msgManager = msgModule.TestMsgManager()
     else:

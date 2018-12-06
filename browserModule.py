@@ -74,7 +74,7 @@ class browserModule(object):
         while True:
             yzm = self.msgManager.getYZM()
             if yzm:
-                print yzm
+                self.msgManager.sendMsg(yzm)
                 break
             time.sleep(8)
         self.msgManager.sendMsg(u"flowMonitor:输入的验证码: %s" % yzm, "text", isSendToWx=True)
