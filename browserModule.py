@@ -37,18 +37,17 @@ class browserModule(object):
 
     def __input_login_info(self): # 输错验证码后可以再次输入，不必刷新页面
         # loginMsgLocator = (By.ID, "div_msg") # 登录信息提示框，比如验证码错误
-        yzmElement      = self.driver.find_element_by_id("verify")
-        # yzmElement.click()
-        try:
-            self.__sendYZM(yzmElement)  # 发送图片失败，再发送一次
-        except:
-            self.msgManager.sendMsg(u"flowMonitor:发送验证码图片失败，尝试再次发送！", "text")
-            self.__input_login_info(user, pwd)
-            return
-        yzm = self.__getYZM()
+        # yzmElement      = self.driver.find_element_by_id("verify")
+        # try:
+        #     self.__sendYZM(yzmElement)  # 发送图片失败，再发送一次
+        # except:
+        #     self.msgManager.sendMsg(u"flowMonitor:发送验证码图片失败，尝试再次发送！", "text")
+        #     self.__input_login_info()
+        #     return
+        # yzm = self.__getYZM()
         self.driver.find_element_by_id("login_userName").send_keys(self.user)
         self.driver.find_element_by_id("login_passWord").send_keys(self.pwd)
-        self.driver.find_element_by_id("u_verify").send_keys(yzm)
+        self.driver.find_element_by_id("u_verify").send_keys('1234')
         self.driver.find_element_by_id("user_login").click()
         # try:
         #     WebDriverWait(self.driver, 3, 0.5).until(EC.visibility_of_element_located(loginMsgLocator))
@@ -135,14 +134,14 @@ class browserModule(object):
         msgText += u"<p style='font-weight:bold'>流量监控平台拓扑图</p><img src='cid:p2'/>"
         imgDict = {
             "p1":"./out.png",
-            "p2":"./topo.jpg"
+            "p2":"./topo.png"
         }
         result = i.send(subject, settings.to_address_list, settings.cc_address_list, msgText, imgDict)
         self.msgManager.sendMsg(result, isSendToWx=True)
 
     def run(self):
         self.__login()
-        time.sleep(2)
+        time.sleep(3)
         self.__openDevList()
         self.__screenshot()
         self.__sendmail()

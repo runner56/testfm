@@ -48,12 +48,12 @@ if __name__ == '__main__':
     lt = time.localtime()    
     ft = time.strftime('%y/%m/%d_%H:%M:%S', lt)
     subject = "%s(%s)" % (u"IDC流量监控平台运行状态", ft)
-    msgText = u"<p><span style='color:green;font-weight:bold'>绿色</span>代表采集设备运行状态正常，<span style='color:red;font-weight:bold'>红色</span>代表异常</p>"
+    msgText = u"<p><span style='color:green;font-weight:bold'>绿色</span>代表采集设备运行状态正常，<span style='color:red;font-weight:bold'>灰色</span>代表异常</p>"
     msgText += u"<p>截图时间：%s</p><img src='cid:p1'/>" % ft
     msgText += u"<p style='font-weight:bold'>流量监控平台拓扑图</p><img src='cid:p2'/>"
     imgDict = {
         "p1":"./out.png",
-        "p2":"./topo.jpg"
+        "p2":"./topo.png"
     }
     result = i.send(subject, settings.to_address_list, settings.cc_address_list, msgText, imgDict)
     print result
