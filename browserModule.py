@@ -125,12 +125,12 @@ class browserModule(object):
 
     def __sendmail(self):
         self.msgManager.sendMsg(u"发送邮件&微信...", isSendToWx=True)
-        self.msgManager.sendMsg(os.path.join(self.__path, "topo.png"), "image", isSendToWx=True)
+        self.msgManager.sendMsg(os.path.join(self.__path, "out.png"), "image", isSendToWx=True)
         i = mailMoudle.mail(settings.smtpServer, settings.smtpPort, settings.username, settings.password)
         lt = time.localtime()    
         ft = time.strftime('%y/%m/%d_%H:%M:%S', lt)
         subject = "%s(%s)" % (u"IDC流量监控平台运行状态", ft)
-        msgText = u"<p><span style='color:green;font-weight:bold'>绿色</span>代表采集设备运行状态正常，<span style='color:red;font-weight:bold'>红色</span>代表异常</p>"
+        msgText = u"<p><span style='color:green;font-weight:bold'>绿色</span>代表采集设备运行状态正常，<span style='color:red;font-weight:bold'>灰色</span>代表异常</p>"
         msgText += u"<p>截图时间：%s</p><img src='cid:p1'/>" % ft
         msgText += u"<p style='font-weight:bold'>流量监控平台拓扑图</p><img src='cid:p2'/>"
         imgDict = {
